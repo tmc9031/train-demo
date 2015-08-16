@@ -1,0 +1,18 @@
+#################
+## Eclipse
+#################
+
+/.metadata/
+/RemoteSystemsTempFiles/
+
+#.project
+#.cproject
+#.classpath
+#.pydevproject
+
+## C ##
+Debug/
+Release/
+
+## Python ##
+__pycache__/
