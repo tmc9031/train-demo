@@ -1,0 +1,10 @@
+[cfg]
+ip = 127.0.0.1
+queue = 10
+port = 50000
+alarm = 10
+log = /tmp/log.txt
+[account]
+acc = A/admin/admin
+acc = U/user1/111
+acc = U/user2/222
