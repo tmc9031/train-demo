@@ -9,6 +9,7 @@
 #define MYSYSLOG_H_
 
 void my_openlog();
+void my_closelog();
 void Error_log(const char *fmt,...);
 void Warning_log(const char *fmt,...);
 void Info_log(const char *fmt,...);

@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "confile.h"
+#include "mysyslog.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,7 +32,10 @@
 
 int confile()
 {
-	readToList(FILE_NAME);
+	if(readToList(FILE_NAME) != EXIT_SUCCESS) {
+		puts("服务器配置文件加载失败!");
+		return EXIT_FAILURE;
+	}
 
 //	PrtInfo();
 
@@ -73,6 +77,8 @@ int readToList(char *strFilename)
 	{
 		Error_log("[错误] fopen:%s",strerror(errno));
 		perror("fopen");
+
+		/* create default config file */
 		fp=default_file(strFilename);
 		if(fp == NULL)
 		{
@@ -130,7 +136,7 @@ FILE *default_file(char *strFilename)
 	}
 
 	fputs("[cfg]\n",fp);
-	fputs("ip = 192.168.10.100\n",fp);
+	fputs("ip = 127.0.0.1\n",fp);
 	fputs("queue = 10\n",fp);
 	fputs("port = 50000\n",fp);
 	fputs("alarm = 10\n",fp);

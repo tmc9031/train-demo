@@ -32,10 +32,13 @@ int my_read(int fd,void *buf,size_t len)
 			{
 				continue;
 			}
+
+			perror("read<0");
 			return cc;
 		}
 		if(cc == 0)
 		{
+			perror("read==0");
 			break;
 		}
 		buf=(char *)(buf)+cc;
@@ -57,6 +60,8 @@ int my_write(int fd,void *buf,size_t len)
 			{
 				continue;
 			}
+
+			perror("write");
 			return cc;
 		}
 		buf=(char *)buf+cc;
@@ -108,8 +113,10 @@ int main(int argc,char *argv[])
 	int ok_num[100]={0};
 	int over_alarm=0;
 	int sPTL=sizeof(PTL);
+	printf("sPTL：%d\n",sPTL);
 
 	my_openlog();
+	Info_log("[通知] my_openlog:%s",strerror(errno));
 
 	confile();
 
@@ -236,8 +243,10 @@ int main(int argc,char *argv[])
 			PTL.len=0;
 			memcpy(buf,&PTL,sPTL);
 			sprintf(buf+sPTL,"输入用户名(还剩%d次)：\n",phase_user[new_sock]);
-			write(new_sock,buf,sPTL+strlen(buf+sPTL));
-
+//			write(new_sock,buf,sPTL+strlen(buf+sPTL));
+			if(my_write(new_sock,buf,sPTL+strlen(buf+sPTL)) < 0) {
+				perror("ERROR write to socket");
+			}
 			FD_SET(new_sock,&set);
 			if(new_sock > maxfd) maxfd=new_sock;
 
@@ -523,7 +532,7 @@ int main(int argc,char *argv[])
 
 	printf("[%d]:main quit!!!",getpid()); /* prints !!!Hello World!!! */
 	Info_log("[通知] 服务器已关闭 IP:%s Port:%s",getItem("ip"),getItem("port"));
-	closelog();
+	my_closelog();
 	ExitFree();
 	return KILL_SERVER;
 }

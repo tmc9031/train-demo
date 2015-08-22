@@ -20,6 +20,11 @@ void my_openlog()
 	openlog(APP_NAME,(LOG_CONS|LOG_NDELAY|LOG_PID),LOG_LOCAL0);
 }
 
+void my_closelog()
+{
+	closelog();
+}
+
 void Error_log(const char *fmt,...)
 {
 	va_list ap;
