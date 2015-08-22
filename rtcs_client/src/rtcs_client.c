@@ -33,10 +33,13 @@ int my_read(int fd,void *buf,size_t len)
 			{
 				continue;
 			}
+
+			perror("read<0");
 			return cc;
 		}
 		if(cc == 0)
 		{
+			perror("read==0");
 			break;
 		}
 		buf=(char *)(buf)+cc;
@@ -74,7 +77,8 @@ int read_buffer(void)
 
 	while(1)
 	{
-		if((ret=my_read(sockfd,buffer,sizeof(buffer)-1))<0)//读取到buffer中
+		//NOTE: read() available size
+		if((ret=read(sockfd,buffer,sizeof(buffer)-1))<0)//读取到buffer中
 		{
 			perror("ERROR read from socket");
 			break;
@@ -86,8 +90,10 @@ int read_buffer(void)
 			break;
 		}
 		buffer[ret]=0;	//read封口
+//		printf("read() size:%d\n",ret);
 
 		memcpy(&PTL,buffer,sPTL);
+//		printf("PTL type:%c len:%d\n",PTL.type, PTL.len);
 
 		if(strcmp(buffer+sPTL,HEART_FLAG) == 0)
 			write(sockfd,buffer,sPTL+strlen(buffer+sPTL));
